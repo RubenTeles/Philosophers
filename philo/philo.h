@@ -6,7 +6,7 @@
 /*   By: rteles <rteles@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 15:26:03 by rteles            #+#    #+#             */
-/*   Updated: 2022/06/09 16:02:00 by rteles           ###   ########.fr       */
+/*   Updated: 2022/07/07 20:02:54 by rteles           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,44 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <pthread.h>
+
+
+
+typedef struct i_philosophers {
+	int	number;
+	int	t_die;
+	int	t_eat;
+	int t_sleep;
+	int	n_x_eat;
+}				t_philophers;
+
+typedef struct i_time
+{
+	struct timeval	current;
+	struct timeval	start;
+	long int		dif;
+	long int		last_dif;
+}				t_time;
+
+typedef struct i_philo {
+	int				n;
+	pthread_t		thread;
+	int				status;
+	pthread_mutex_t	fork;
+	int				eat;
+	long int		t_live;
+	t_time			*t;
+	t_philophers	*p;
+	struct t_philo	*next_philo;
+}				t_philo;
+
+typedef struct i_all
+{
+	t_time			t;
+	t_philophers	p;
+	t_philo			*philo;
+	int				i;
+}				t_all;
 
 #endif
 
