@@ -6,7 +6,7 @@
 /*   By: rteles <rteles@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 15:26:03 by rteles            #+#    #+#             */
-/*   Updated: 2022/07/07 20:02:54 by rteles           ###   ########.fr       */
+/*   Updated: 2022/07/22 21:56:57 by rteles           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,43 +20,68 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-
-
-typedef struct i_philosophers {
-	int	number;
-	int	t_die;
-	int	t_eat;
-	int t_sleep;
-	int	n_x_eat;
-}				t_philophers;
-
-typedef struct i_time
-{
-	struct timeval	current;
-	struct timeval	start;
-	long int		dif;
-	long int		last_dif;
-}				t_time;
+typedef struct i_rules {
+	long int	t_start;
+	int			number;
+	int			t_die;
+	int			t_eat;
+	int 		t_sleep;
+	int			n_x_eat;
+}				t_rules;
 
 typedef struct i_philo {
 	int				n;
 	pthread_t		thread;
 	int				status;
-	pthread_mutex_t	fork;
+	int				use_fork;
+	int				*use_fork_2;
+	long int		last_eat;
 	int				eat;
 	long int		t_live;
-	t_time			*t;
-	t_philophers	*p;
-	struct t_philo	*next_philo;
+	int				is_thinking;
+	int				is_dead;
+	long long		time_dead;
+	pthread_mutex_t	fork;
+	pthread_mutex_t	*fork_2;
+	int				*dead;
+	pthread_mutex_t	*speak;
+	t_rules			*rules;
 }				t_philo;
 
 typedef struct i_all
 {
-	t_time			t;
-	t_philophers	p;
+	t_rules			rules;
 	t_philo			*philo;
 	int				i;
+	int				*dead;
+	pthread_mutex_t	speak;
+	
 }				t_all;
+
+//------ Utils -----//
+int			ft_atoi(char *str);
+int			ft_str_s_str(char *s1, char *s2);
+void		sleeping(int time_max);
+long long	time_current(void);
+void		ft_mensage(long long t_start, t_philo *philo, char *status);
+
+//------ Init -----//
+int		ft_organize_philosophers(t_all *all, int argc, char **argv, int i);
+void	ft_rules(t_rules *rules, int argc, char **argv);
+void	ft_philosophers(t_philo *philo, t_philo *philo_2, int i);
+
+//------ Logic -----//
+int		ft_logic(t_all *all, int i);
+void	*logic(void *arg);
+
+//------ Status -----//
+int	is_dead(t_philo *philo);
+int	ft_take_forks(t_philo *philo);
+int	ft_eat(t_philo *philo);
+int	ft_sleep(t_philo *philo);
+int	ft_thinking(t_philo *philo);
+
+
 
 #endif
 
